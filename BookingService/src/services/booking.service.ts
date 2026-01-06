@@ -1,6 +1,6 @@
 
 import { CreateBookingDTO } from "../dto/booking.dto";
-import { confirmBooking, createBooking, createIdempotencyKey, finalizeIdempotencyKey, getBookingById, getIdempotencyKey } from "../repositories/booking.repository";
+import { confirmBooking, createBooking, createIdempotencyKey, finalizeIdempotencyKey, getIdempotencyKey } from "../repositories/booking.repository";
 import { BadRequestError, NotFoundError } from "../utils/errors/app.error";
 import { generateIdempotencyKey } from "../utils/generateIdempotencyKey";
 
