@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { updateHotelByIdService, createHotelService, deleteHotelService, getAllHotelsService, getHotelByIdService } from "../services/hotel.service";
+import {  createHotelService, deleteHotelService, getAllHotelsService, getHotelByIdService } from "../services/hotel.service";
 import { StatusCodes } from "http-status-codes";
 
 export async function createHotelHandler(req : Request, res: Response, Next : NextFunction) {
@@ -50,12 +50,12 @@ export async function deleteHotelHandler(req: Request, res: Response, Next: Next
 }
 
 
-export async function updateHotelByIdController(req: Request, res: Response, Next: NextFunction) {
-    const hotelResponse = await updateHotelByIdService(Number(req.params.id), req.body.hotelName);
+// export async function updateHotelByIdController(req: Request, res: Response, Next: NextFunction) {
+//     const hotelResponse = await updateHotelByIdService(Number(req.params.id), req.body.hotelName);
     
-    res.status(StatusCodes.OK).json({
-        message : "Hotel updated successfully",
-        data : hotelResponse,
-        success : true
-    })
-}
+//     res.status(StatusCodes.OK).json({
+//         message : "Hotel updated successfully",
+//         data : hotelResponse,
+//         success : true
+//     })
+// }

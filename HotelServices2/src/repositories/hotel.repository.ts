@@ -1,78 +1,115 @@
 
 import logger from "../config/logger.config";
 import Hotel from "../db/models/hotel";
-import { createHotelDto } from "../dto/hotel.dto";
+// import { createHotelDto } from "../dto/hotel.dto";
 import { NotFoundError } from "../utils/errors/app.error";
+import BaseRepository from "./base.repository";
 
-export async function createHotel(hotelData : createHotelDto) {
-    const hotel = await Hotel.create({
-        name : hotelData.name,
-        address : hotelData.address,
-        location : hotelData.location,
-        rating : hotelData.rating,
-        ratingCount : hotelData.ratingCount
-    })
+// export async function createHotel(hotelData : createHotelDto) {
+//     const hotel = await Hotel.create({
+//         name : hotelData.name,
+//         address : hotelData.address,
+//         location : hotelData.location,
+//         rating : hotelData.rating,
+//         ratingCount : hotelData.ratingCount
+//     })
 
-    logger.info(`Hotel created: ${hotel.id}`);
+//     logger.info(`Hotel created: ${hotel.id}`);
 
-    return hotel;
-}
+//     return hotel;
+// }
 
-export async function getHotelById(id : number) {
-    const hotel = await Hotel.findByPk(id);
+// export async function getHotelById(id : number) {
+//     const hotel = await Hotel.findByPk(id);
 
-    if(!hotel) {
-        logger.info(`Hotel not found : ${id}`);
-        throw new NotFoundError("Hotel not found");
-    }
+//     if(!hotel) {
+//         logger.info(`Hotel not found : ${id}`);
+//         throw new NotFoundError("Hotel not found");
+//     }
 
-    logger.info(`Hotel found : ${hotel.id}`)
+//     logger.info(`Hotel found : ${hotel.id}`)
 
-    return hotel;
-}
+//     return hotel;
+// }
 
-export async function getAllHotels() {
-    const hotels = await Hotel.findAll({
-        where : {
-            deletedAt : null
-        }
-    });
+// export async function getAllHotels() {
+//     const hotels = await Hotel.findAll({
+//         where : {
+//             deletedAt : null
+//         }
+//     });
 
-    if(!hotels) {
-        logger.info(`Hotel not found`);
-        throw new NotFoundError("No hotels found");
-    }
+//     if(!hotels) {
+//         logger.info(`Hotel not found`);
+//         throw new NotFoundError("No hotels found");
+//     }
 
-    logger.info(`Hotels found : ${hotels.length}`);
+//     logger.info(`Hotels found : ${hotels.length}`);
     
-    return hotels;
-}
+//     return hotels;
+// }
 
-export async function softDeleteHotel(id : number) {
-    const hotel = await Hotel.findByPk(id);
+// export async function softDeleteHotel(id : number) {
+//     const hotel = await Hotel.findByPk(id);
 
-    if(!hotel) {
-        logger.info('Hotel not found');
-        throw new NotFoundError(`hotel with id : ${id} not found`);
+//     if(!hotel) {
+//         logger.info('Hotel not found');
+//         throw new NotFoundError(`hotel with id : ${id} not found`);
+//     }
+
+//     hotel.deletedAt = new Date();
+//     await hotel.save();
+//     logger.info(`hotel soft deleted : ${hotel.id}`);
+//     return hotel;
+// }
+
+// export async function updateHotelById(id: number, hotelName: string) {
+//     const hotel = await Hotel.findByPk(id);
+
+//     if(!hotel) {
+//         logger.info('Hotel not found');
+//         throw new NotFoundError(`hotel with id : ${id} not found`);
+//     }
+
+//     await hotel.update({
+//         name : hotelName
+//     })
+//     await hotel.save();
+//     return hotel;
+// }
+
+export class HotelRepository extends BaseRepository<Hotel> {
+    constructor() {
+        super(Hotel);
     }
 
-    hotel.deletedAt = new Date();
-    await hotel.save();
-    logger.info(`hotel soft deleted : ${hotel.id}`);
-    return hotel;
-}
+    async findAll() {
+        const hotels = await Hotel.findAll({
+            where : {
+                deletedAt : null
+            }
+        });
 
-export async function updateHotelById(id: number, hotelName: string) {
-    const hotel = await Hotel.findByPk(id);
+        if(!hotels) {
+            logger.info(`Hotel not found`);
+            throw new NotFoundError("No hotels found");
+        }
 
-    if(!hotel) {
-        logger.info('Hotel not found');
-        throw new NotFoundError(`hotel with id : ${id} not found`);
+        logger.info(`Hotels found : ${hotels.length}`);
+        return hotels;
     }
 
-    await hotel.update({
-        name : hotelName
-    })
-    await hotel.save();
-    return hotel;
+    async softDelete(id : number) {
+        const hotel = await Hotel.findByPk(id);
+
+        if(!hotel) {
+            logger.info('Hotel not found');
+            throw new NotFoundError(`hotel with id : ${id} not found`);
+        }
+
+        hotel.deletedAt = new Date();
+        await hotel.save();
+        logger.info(`hotel soft deleted : ${hotel.id}`);
+        return hotel;
+    }
 }
