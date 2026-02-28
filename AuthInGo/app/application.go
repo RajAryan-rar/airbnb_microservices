@@ -10,6 +10,18 @@ type Config struct {
 	Addr string
 }
 
+func NewConfig(addr string) *Config {
+	return &Config{
+		Addr: addr,
+	}
+} 
+
+func NewApplication(cfg Config) *Application {
+	return &Application{
+		Config: cfg,
+	}
+}
+
 type Application struct {
 	Config Config
 }
