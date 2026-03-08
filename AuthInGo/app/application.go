@@ -1,7 +1,7 @@
 package app
 
 import (
-	"AuthInGo/config"
+	"AuthInGo/config/env"
 	"AuthInGo/controllers"
 	db "AuthInGo/db/repositories"
 	"AuthInGo/router"
