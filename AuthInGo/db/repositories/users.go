@@ -8,6 +8,7 @@ import (
 
 type UserRepository interface {
 	GetById() (*models.User, error)
+	GetByEmail(email string) (*models.User, error)
 	Create(username string, email string, hashedPassword string) error
 	GetAll() ([]*models.User, error)
 	DeleteById(id int64) error
@@ -117,6 +118,30 @@ func (u *UserRepositoryImpl) GetById() (*models.User,error) {
 
 	//Step 4: Print the user details 
 	fmt.Println("User fetched successfully:", user);
+
+	return user, nil
+}
+
+func (u *UserRepositoryImpl) GetByEmail(email string) (*models.User,error) {
+	
+	query := "SELECT id, email, password FROM users WHERE email = ?"
+	
+	row := u.db.QueryRow(query,email);
+
+	user := &models.User{}
+
+	err := row.Scan(&user.Id, &user.Email, &user.Password);
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("No user found with the given ID")
+			return  nil, err;
+		} else {
+			fmt.Println("Error scanning user:", err)
+			return nil, err;
+		}
+	}
+	fmt.Println("User fetched successfully");
 
 	return user, nil
 }

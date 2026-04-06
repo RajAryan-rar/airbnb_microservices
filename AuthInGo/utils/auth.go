@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
+	// "github.com/golang-jwt/jwt/v5"
 )
 
 func HashPassword(password string) (string, error) {
@@ -20,3 +21,4 @@ func CheckPasswordHash(password string, hashedPassword string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword),[]byte(password))
 	return err == nil
 }
+
