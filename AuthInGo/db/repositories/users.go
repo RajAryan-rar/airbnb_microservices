@@ -18,10 +18,44 @@ type UserRepositoryImpl struct {
 }
 
 func (u *UserRepositoryImpl) GetAll() ([]*models.User, error) {
+	// // prepare the query
+	// query := "SELECT * FROM users";
+
+	// //execute the query
+	// rows, err := u.db.Query(query);
+
+	// users := &[]models.User{}
+
+
+
 	return nil,nil
 }
 
 func (u *UserRepositoryImpl) DeleteById(id int64) error {
+	//prepare the query
+	query := "DELETE FROM users WHERE id = ?";
+
+	//execute the query
+	result,err := u.db.Exec(query,1)
+
+	if(err != nil) {
+		fmt.Println("Error deleting user", err);
+		return err;
+	}
+
+	rowAffected, rowErr := result.RowsAffected();
+
+	if(rowErr != nil) {
+		fmt.Println("Error getting rows affected!", rowErr);
+		return rowErr;
+	}
+
+	if(rowAffected == 0) {
+		fmt.Println("No rows were affected, user not deleted");
+		return nil;
+	}
+
+	fmt.Println("user deleted successfully, rows affected : ", rowAffected);
 	return nil
 }
 
